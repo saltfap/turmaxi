@@ -427,3 +427,16 @@ main {
   border-radius: 6px;
   font-weight: bold;
 }
+
+.cal-dia.hoje {
+  background: #2a7cff;
+  color: white;
+}
+
+.cal-dia.evento {
+  border: 2px solid #ff9800;
+}
+
+.cal-dia.prova { background: #ff4d4d; color:white; }
+.cal-dia.trabalho { background: #4caf50; color:white; }
+.cal-dia.aviso { background: #ff9800; color:white; }

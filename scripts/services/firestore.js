@@ -172,4 +172,23 @@ export async function listarAvaliacoesAtivas() {
   });
 }
 
+// =======================
+// EVENTOS CALENDÁRIO
+// =======================
+
+export async function listarEventos() {
+  const snapshot = await getDocs(collection(db, "eventos"));
+
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+}
+
+export async function criarEvento(dados) {
+  return addDoc(collection(db, "eventos"), {
+    ...dados,
+    criadoEm: serverTimestamp()
+  });
+}
 
