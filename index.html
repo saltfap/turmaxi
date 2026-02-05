@@ -103,14 +103,17 @@
       <!-- EVENTOS -->
       <div class="card">
         <h2>📅 Próximos Eventos</h2>
-        <div id="eventos-list">
-          <p class="empty">Nenhum evento cadastrado.</p>
-        </div>
+        <div class="calendario-header">
+      <button id="cal-prev">←</button>
 
-        <button class="btn admin-only hidden">
-          + Criar evento
-        </button>
-      </div>
+      <h2 id="cal-titulo">Mês Ano</h2>
+
+      <button id="cal-next">→</button>
+    </div>
+
+    <div class="calendario-grid" id="cal-grid"></div>
+
+  </div>
 
       <!-- VOTAÇÕES -->
       <div class="card">
@@ -415,12 +418,3 @@
   
 </body>
 </html>
-
-
-
-
-
-
-
-
-
