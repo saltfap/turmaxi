@@ -106,14 +106,17 @@ export function initCalendario() {
       // clique no dia
       el.addEventListener("click", () => {
 
-        diaSelecionado = dataDia;
+  if (!window.isAdmin) return;
 
-        tituloInput.value = "";
-        descInput.value = "";
-        tipoInput.value = "aviso";
+  diaSelecionado = dataDia;
 
-        modal.classList.remove("hidden");
-      });
+  tituloInput.value = "";
+  descInput.value = "";
+  tipoInput.value = "aviso";
+
+  modal.classList.remove("hidden");
+});
+
 
       grid.appendChild(el);
     }
@@ -138,6 +141,8 @@ export function initCalendario() {
   // ========================
 
   salvarBtn.addEventListener("click", async () => {
+
+  if (!window.isAdmin) return;
 
     if (!diaSelecionado) return;
     if (!tituloInput.value.trim()) return;
