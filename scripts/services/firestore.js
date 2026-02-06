@@ -287,22 +287,3 @@ export async function responderDuvida(id, resposta) {
     respondidaEm: serverTimestamp()
   });
 }
-
-// =======================
-// DÚVIDAS — CRIAR
-// =======================
-
-export async function criarDuvida(dados) {
-
-  return addDoc(collection(db, "duvidas"), {
-    pergunta: dados.pergunta,
-    nome: dados.nome || "",
-    disciplina: dados.disciplina || "",
-    resposta: "",
-    status: "pendente",
-    publica: false,
-    criadoEm: serverTimestamp(),
-    respondidoEm: null
-  });
-
-}
