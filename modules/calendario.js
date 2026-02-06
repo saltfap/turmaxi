@@ -12,6 +12,10 @@ export function initCalendario() {
   const btnNext = document.getElementById("cal-next");
 
   const modal = document.getElementById("modal-evento");
+  if (!window.isAdmin && modal) {
+  modal.remove();
+}
+
 
   const tituloInput = document.getElementById("evento-titulo");
   const tipoInput = document.getElementById("evento-tipo");
