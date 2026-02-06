@@ -404,10 +404,26 @@ main {
 
 .calendario-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
 }
+
+@media (max-width: 480px) {
+
+  .cal-dia {
+    font-size: 12px;
+  }
+
+  #cal-titulo {
+    font-size: 18px;
+    text-align: center;
+    width: 100%;
+  }
+
+}
+
 
 .calendario-header button {
   padding: 6px 10px;
@@ -417,16 +433,16 @@ main {
 .calendario-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  gap: 8px;
+  width: 100%;
 }
 
 .cal-dia {
-  background: #f5f5f5;
-  padding: 12px;
-  text-align: center;
-  border-radius: 6px;
-  font-weight: bold;
+  aspect-ratio: 1;
+  width: 100%;
+  font-size: 14px;
 }
+
 
 .cal-dia.hoje {
   background: #2a7cff;
