@@ -4,6 +4,7 @@ import {
 } from "../services/firestore.js";
 
 export function initCalendario() {
+  const isAdmin = window.isAdmin === true;
 
   const titulo = document.getElementById("cal-titulo");
   const grid = document.getElementById("cal-grid");
@@ -11,18 +12,23 @@ export function initCalendario() {
   const btnPrev = document.getElementById("cal-prev");
   const btnNext = document.getElementById("cal-next");
 
-  const modal = document.getElementById("modal-evento");
-  if (!window.isAdmin && modal) {
-  modal.remove();
+  let modal = null;
+let tituloInput = null;
+let tipoInput = null;
+let descInput = null;
+let salvarBtn = null;
+let cancelarBtn = null;
+
+if (isAdmin) {
+  modal = document.getElementById("modal-evento");
+  tituloInput = document.getElementById("evento-titulo");
+  tipoInput = document.getElementById("evento-tipo");
+  descInput = document.getElementById("evento-descricao");
+
+  salvarBtn = document.getElementById("salvar-evento");
+  cancelarBtn = document.getElementById("cancelar-evento");
 }
 
-
-  const tituloInput = document.getElementById("evento-titulo");
-  const tipoInput = document.getElementById("evento-tipo");
-  const descInput = document.getElementById("evento-descricao");
-
-  const salvarBtn = document.getElementById("salvar-evento");
-  const cancelarBtn = document.getElementById("cancelar-evento");
 
   let dataAtual = new Date();
   let eventos = [];
@@ -110,7 +116,7 @@ export function initCalendario() {
       // clique no dia
       el.addEventListener("click", () => {
 
-  if (!window.isAdmin) return;
+  if (!isAdmin) return;
 
   diaSelecionado = dataDia;
 
@@ -120,6 +126,7 @@ export function initCalendario() {
 
   modal.classList.remove("hidden");
 });
+
 
 
       grid.appendChild(el);
@@ -144,9 +151,9 @@ export function initCalendario() {
   // SALVAR EVENTO
   // ========================
 
-  salvarBtn.addEventListener("click", async () => {
+  if (isAdmin && salvarBtn && cancelarBtn) {
 
-  if (!window.isAdmin) return;
+  salvarBtn.addEventListener("click", async () => {
 
     if (!diaSelecionado) return;
     if (!tituloInput.value.trim()) return;
@@ -159,13 +166,14 @@ export function initCalendario() {
     });
 
     modal.classList.add("hidden");
-
     renderizar();
   });
 
   cancelarBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
   });
+}
+
 
   // iniciar
   renderizar();
