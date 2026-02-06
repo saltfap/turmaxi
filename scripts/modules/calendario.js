@@ -118,7 +118,9 @@ console.log("Evento salvo:", diaSelecionado);
       }
 
       // clique no dia
-      el.addEventListener("click", () => {
+    el.addEventListener("click", () => {
+
+  mostrarEventosDoDia(dataDia);
 
   if (!isAdmin) return;
 
@@ -130,6 +132,7 @@ console.log("Evento salvo:", diaSelecionado);
 
   modal.classList.remove("hidden");
 });
+
 
 
 
@@ -176,6 +179,32 @@ console.log("Evento salvo:", diaSelecionado);
   cancelarBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
   });
+}
+
+
+function mostrarEventosDoDia(data) {
+
+  const box = document.getElementById("cal-detalhes");
+
+  const eventosDia = eventos.filter(ev => {
+    const d = ev.data.toDate();
+    d.setHours(0,0,0,0);
+    return d.getTime() === data.getTime();
+  });
+
+  if (!eventosDia.length) {
+    box.innerHTML = "<p>Nenhum evento neste dia.</p>";
+  } else {
+
+    box.innerHTML = eventosDia.map(ev => `
+      <div class="evento-card ${ev.tipo}">
+        <strong>${ev.titulo}</strong>
+        <p>${ev.descricao || ""}</p>
+      </div>
+    `).join("");
+  }
+
+  box.classList.remove("hidden");
 }
 
 
