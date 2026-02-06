@@ -3,6 +3,9 @@ import {
   criarEvento
 } from "../services/firestore.js";
 
+import { Timestamp } from 
+"https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
 export function initCalendario() {
   const isAdmin = window.isAdmin === true;
 
@@ -51,7 +54,7 @@ if (isAdmin) {
 
   function eventoNoDia(dia, mes, ano) {
     return eventos.find(ev => {
-      const d = new Date(ev.data);
+      const d = ev.data.toDate();
       d.setHours(0,0,0,0);
 
       return (
@@ -68,6 +71,7 @@ if (isAdmin) {
 
   async function renderizar() {
 
+console.log("Evento salvo:", diaSelecionado);
     await carregarEventos();
 
     grid.innerHTML = "";
@@ -162,7 +166,7 @@ if (isAdmin) {
       titulo: tituloInput.value,
       descricao: descInput.value,
       tipo: tipoInput.value,
-      data: diaSelecionado
+      data: Timestamp.fromDate(diaSelecionado)
     });
 
     modal.classList.add("hidden");
