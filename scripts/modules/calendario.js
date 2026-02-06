@@ -125,22 +125,8 @@ console.log("Evento salvo:", diaSelecionado);
 
       // clique no dia
     el.addEventListener("click", () => {
-
   mostrarEventosDoDia(dataDia);
-
-  if (!isAdmin) return;
-
-  diaSelecionado = dataDia;
-
-  tituloInput.value = "";
-  descInput.value = "";
-  if (tipoInput) tipoInput.value = "aviso";
-
-  modal.classList.remove("hidden");
 });
-
-
-
 
       grid.appendChild(el);
     }
@@ -210,35 +196,93 @@ mostrarEventosDoDia(diaSelecionado);
 
 function mostrarEventosDoDia(data) {
 
+  if (!data) return;
+
   const box = document.getElementById("cal-detalhes");
+
+  const dataNormalizada = new Date(data);
+  dataNormalizada.setHours(0,0,0,0);
+
   box.innerHTML = "";
 
-  const lista = itensDoDia(
-    data.getDate(),
-    data.getMonth(),
-    data.getFullYear()
-  );
+  const eventosDia = eventos.filter(ev => {
 
-  const titulo = data.toLocaleDateString("pt-BR");
+    const d = ev.data.toDate();
+    d.setHours(0,0,0,0);
 
-  if (!lista.length) {
-    box.innerHTML = `<h3>${titulo}</h3><p>Nenhum evento neste dia.</p>`;
-    box.classList.remove("hidden");
-    return;
-  }
+    return d.getTime() === dataNormalizada.getTime();
+  });
+
+  // =========================
+  // Cabeçalho do dia
+  // =========================
 
   box.innerHTML = `
-    <h3>${titulo}</h3>
-    ${lista.map(item => `
-      <div class="evento-card ${item.tipo}">
-        <strong>${item.titulo}</strong>
-        <p>${item.descricao || ""}</p>
-      </div>
-    `).join("")}
+    <h3>${dataNormalizada.toLocaleDateString("pt-BR")}</h3>
+
+    ${
+      isAdmin ? `
+        <button id="btn-add-evento" class="btn">
+          + Adicionar evento
+        </button>
+      ` : ""
+    }
   `;
 
+  // =========================
+  // Lista de eventos
+  // =========================
+
+  if (!eventosDia.length) {
+
+    box.innerHTML += `<p>Nenhum evento neste dia.</p>`;
+
+  } else {
+
+    box.innerHTML += eventosDia.map(ev => `
+      <div class="evento-card ${ev.tipo}">
+        <strong>${ev.titulo}</strong>
+        <p>${ev.descricao || ""}</p>
+
+        ${
+          isAdmin ? `
+          <div class="evento-actions">
+            <button data-edit="${ev.id}">✏ Editar</button>
+            <button data-hide="${ev.id}">🗑 Ocultar</button>
+          </div>
+          ` : ""
+        }
+      </div>
+    `).join("");
+  }
+
   box.classList.remove("hidden");
+
+  // =========================
+  // Botão adicionar evento
+  // =========================
+
+  if (isAdmin) {
+    const btnAdd = document.getElementById("btn-add-evento");
+
+    if (btnAdd) {
+      btnAdd.onclick = () => {
+
+        diaSelecionado = dataNormalizada;
+
+        tituloInput.value = "";
+        descInput.value = "";
+
+        delete modal.dataset.editando;
+
+        modal.classList.remove("hidden");
+      };
+    }
+
+    ligarAcoesEventos();
+  }
 }
+
 
 
 function itensDoDia(dia, mes, ano) {
