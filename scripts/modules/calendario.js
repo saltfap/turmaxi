@@ -207,49 +207,43 @@ function mostrarEventosDoDia(data) {
 
   const box = document.getElementById("cal-detalhes");
 
-  const dataTitulo = data.toLocaleDateString("pt-BR");
+  // 🔥 LIMPA SEMPRE
+  box.innerHTML = "";
 
   const eventosDia = eventos.filter(ev => {
 
-    const d = ev.data.toDate();
+    const d = ev.data.toDate(); // ← CORREÇÃO
     d.setHours(0,0,0,0);
 
     return d.getTime() === data.getTime();
   });
 
   if (!eventosDia.length) {
-    box.innerHTML = `
-      <h3>${dataTitulo}</h3>
-      <p>Nenhum evento neste dia.</p>
-    `;
+    box.innerHTML = "<p>Nenhum evento neste dia.</p>";
     box.classList.remove("hidden");
     return;
   }
 
-  box.innerHTML = `
-    <h3>${dataTitulo}</h3>
-    ${eventosDia.map(ev => `
-      <div class="evento-card ${ev.tipo}">
-        <strong>${ev.titulo}</strong>
-        <p>${ev.descricao || ""}</p>
+  box.innerHTML = eventosDia.map(ev => `
+    <div class="evento-card ${ev.tipo}">
+      <strong>${ev.titulo}</strong>
+      <p>${ev.descricao || ""}</p>
 
-        ${
-          isAdmin ? `
-          <div class="evento-actions">
-            <button data-edit="${ev.id}">✏ Editar</button>
-            <button data-hide="${ev.id}">👁 Ocultar</button>
-          </div>
-          ` : ""
-        }
-      </div>
-    `).join("")}
-  `;
+      ${
+        isAdmin ? `
+        <div class="evento-actions">
+          <button data-edit="${ev.id}">✏ Editar</button>
+          <button data-hide="${ev.id}">👁 Ocultar</button>
+        </div>
+        ` : ""
+      }
+    </div>
+  `).join("");
 
   box.classList.remove("hidden");
 
   if (isAdmin) ligarAcoesEventos();
 }
-
 
 
 function ligarAcoesEventos() {
@@ -262,6 +256,7 @@ function ligarAcoesEventos() {
       const ev = eventos.find(e => e.id === id);
 
       diaSelecionado = ev.data.toDate();
+diaSelecionado.setHours(0,0,0,0);
 
       tituloInput.value = ev.titulo;
       descInput.value = ev.descricao || "";
@@ -286,7 +281,6 @@ function ligarAcoesEventos() {
 await renderizar();
 mostrarEventosDoDia(diaSelecionado);
 
-      document.getElementById("cal-detalhes").classList.add("hidden");
     };
   });
 }
@@ -294,5 +288,10 @@ mostrarEventosDoDia(diaSelecionado);
 
 
   // iniciar
-  renderizar();
+renderizar();
+
+const box = document.getElementById("cal-detalhes");
+if (box) box.classList.add("hidden");
+
+
 }
