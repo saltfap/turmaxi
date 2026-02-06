@@ -1,7 +1,10 @@
 import {
   listarEventos,
-  criarEvento
+  criarEvento,
+  editarEvento,
+  ocultarEvento
 } from "../services/firestore.js";
+
 
 import { Timestamp } from 
 "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
@@ -165,12 +168,27 @@ console.log("Evento salvo:", diaSelecionado);
     if (!diaSelecionado) return;
     if (!tituloInput.value.trim()) return;
 
-    await criarEvento({
-      titulo: tituloInput.value,
-      descricao: descInput.value,
-      tipo: tipoInput.value,
-      data: Timestamp.fromDate(diaSelecionado)
-    });
+    if (modal.dataset.editando) {
+
+  await editarEvento(modal.dataset.editando, {
+    titulo: tituloInput.value,
+    descricao: descInput.value,
+    tipo: tipoInput.value,
+    data: diaSelecionado
+  });
+
+  delete modal.dataset.editando;
+
+} else {
+
+  await criarEvento({
+    titulo: tituloInput.value,
+    descricao: descInput.value,
+    tipo: tipoInput.value,
+    data: diaSelecionado
+  });
+}
+
 
     modal.classList.add("hidden");
     renderizar();
@@ -187,25 +205,75 @@ function mostrarEventosDoDia(data) {
   const box = document.getElementById("cal-detalhes");
 
   const eventosDia = eventos.filter(ev => {
-    const d = ev.data.toDate();
+    const d = new Date(ev.data);
     d.setHours(0,0,0,0);
     return d.getTime() === data.getTime();
   });
 
   if (!eventosDia.length) {
     box.innerHTML = "<p>Nenhum evento neste dia.</p>";
-  } else {
-
-    box.innerHTML = eventosDia.map(ev => `
-      <div class="evento-card ${ev.tipo}">
-        <strong>${ev.titulo}</strong>
-        <p>${ev.descricao || ""}</p>
-      </div>
-    `).join("");
+    box.classList.remove("hidden");
+    return;
   }
 
+  box.innerHTML = eventosDia.map(ev => `
+    <div class="evento-card ${ev.tipo}">
+      <strong>${ev.titulo}</strong>
+      <p>${ev.descricao || ""}</p>
+
+      ${
+        isAdmin ? `
+        <div class="evento-actions">
+          <button data-edit="${ev.id}">✏ Editar</button>
+          <button data-hide="${ev.id}">👁 Ocultar</button>
+        </div>
+        ` : ""
+      }
+    </div>
+  `).join("");
+
   box.classList.remove("hidden");
+
+  if (isAdmin) ligarAcoesEventos();
 }
+
+function ligarAcoesEventos() {
+
+  // editar
+  document.querySelectorAll("[data-edit]").forEach(btn => {
+    btn.onclick = () => {
+
+      const id = btn.dataset.edit;
+      const ev = eventos.find(e => e.id === id);
+
+      diaSelecionado = new Date(ev.data);
+
+      tituloInput.value = ev.titulo;
+      descInput.value = ev.descricao || "";
+      tipoInput.value = ev.tipo;
+
+      modal.dataset.editando = id;
+
+      modal.classList.remove("hidden");
+    };
+  });
+
+  // ocultar
+  document.querySelectorAll("[data-hide]").forEach(btn => {
+    btn.onclick = async () => {
+
+      const id = btn.dataset.hide;
+
+      if (!confirm("Ocultar evento?")) return;
+
+      await ocultarEvento(id);
+
+      renderizar();
+      document.getElementById("cal-detalhes").classList.add("hidden");
+    };
+  });
+}
+
 
 
   // iniciar

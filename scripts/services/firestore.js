@@ -192,3 +192,18 @@ export async function criarEvento(dados) {
   });
 }
 
+// =======================
+// EVENTOS
+// =======================
+
+export async function editarEvento(id, dados) {
+  const ref = doc(db, "eventos", id);
+  return updateDoc(ref, dados);
+}
+
+export async function ocultarEvento(id) {
+  const ref = doc(db, "eventos", id);
+  return updateDoc(ref, {
+    ativo: false
+  });
+}
