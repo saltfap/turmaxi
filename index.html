@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+ <link rel="icon" href="assets/img/escudo.png">
+ <link rel="apple-touch-icon" href="assets/img/escudo.png">
+
+  <title>Turma XI | Teologia SALT-FAP</title>
+  <meta name="description" content="Painel Acadêmico da Turma XI de Teologia do SALT-FAP" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0B2A4A" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="styles/base.css" />
+
+  <!-- Favicon / Ícone -->
+  <link rel="icon" href="assets/img/logo-icon.png" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <img 
+      src="assets/img/logo.png" 
+      alt="Turma XI | Teologia SALT-FAP"
+      class="app-logo"
+    />
+
+    <div class="app-title">
+      <h1>Turma XI | Teologia</h1>
+      <span>Painel Acadêmico • SALT-FAP</span>
+    </div>
+
+    <!-- Badge de liderança (oculto por padrão) -->
+    <div id="admin-badge" class="admin-badge hidden">
+      Modo Liderança
+    </div>
+  </header>
+
+  <nav class="top-nav">
+  <button class="nav-item active" data-section="home">🏠 Home</button>
+  <button class="nav-item" data-section="avaliacoes">📚 Avaliações</button>
+  <button class="nav-item" data-section="horarios">⏰ Horários</button>
+  <button class="nav-item" data-section="ementas">📖 Ementas</button>
+  <button class="nav-item" data-section="calendario">🗓️ Calendário</button>
+</nav>
+
+
+  <!-- MAIN -->
+  <main id="app">
+
+    <!-- HOME -->
+    <section id="home" class="section active">
+
+      <!-- ANÚNCIOS -->
+      <div class="card">
+        <h2>📢 Anúncios</h2>
+        <div id="anuncios-list">
+          <p class="empty">Nenhum anúncio publicado.</p>
+        </div>
+
+        <!-- Botão admin -->
+        <button class="btn admin-only hidden">
+          + Criar anúncio
+        </button>
+      </div>
+
+<!-- AVALIAÇÕES (HOME) -->
+<div class="card">
+  <h2>📚 Avaliações</h2>
+
+  <div class="avaliacoes-home">
+
+    <div class="avaliacoes-coluna">
+      <strong>HOJE</strong>
+      <div id="avaliacoes-hoje">
+        <p class="empty">Nenhuma avaliação hoje.</p>
+      </div>
+    </div>
+
+    <div class="avaliacoes-coluna">
+      <strong>ESSA SEMANA</strong>
+      <div id="avaliacoes-semana">
+        <p class="empty">Nenhuma avaliação esta semana.</p>
+      </div>
+    </div>
+
+    <div class="avaliacoes-coluna">
+      <strong>PENDÊNCIAS</strong>
+      <div id="avaliacoes-pendencias">
+        <p class="empty">Nenhuma pendência.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+      <!-- EVENTOS -->
+      <div class="card">
+        <h2>📅 Próximos Eventos</h2>
+        <div class="calendario-header">
+      <button id="cal-prev">←</button>
+
+      <h2 id="cal-titulo">Mês Ano</h2>
+
+      <button id="cal-next">→</button>
+    </div>
+
+    <div class="calendario-grid" id="cal-grid"></div>
+
+<div id="cal-detalhes" class="cal-detalhes hidden"></div>
+
+  </div>
+
+      <!-- VOTAÇÕES -->
+      <div class="card">
+        <h2>🗳️ Votações</h2>
+        <div id="votacoes-list">
+          <p class="empty">Nenhuma votação ativa.</p>
+        </div>
+
+        <button class="btn admin-only hidden">
+          + Criar votação
+        </button>
+      </div>
+
+      <!-- DÚVIDAS -->
+      <div class="card">
+  <h2>❓ Dúvidas & Respostas</h2>
+
+  <p>
+    Envie sua dúvida para a liderança.
+    As respostas públicas aparecem no mural.
+  </p>
+
+  <button class="btn" id="btn-enviar-duvida">
+    Enviar dúvida
+  </button>
+
+  <div id="mural-duvidas">
+    <p class="empty">Nenhuma resposta publicada ainda.</p>
+  </div>
+</div>
+
+
+      <!-- MONITORIA -->
+      <div class="card disabled">
+        <h2>📘 Monitoria</h2>
+        <p>Disponível no 2º semestre</p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Scripts -->
+  <script type="module" src="scripts/admin.js"></script>
+  <script type="module" src="scripts/main.js"></script>
+
+<!-- MODAL CRIAR ANÚNCIO -->
+<div id="modal-anuncio" class="modal hidden">
+  <div class="modal-content">
+    <h3>Novo anúncio</h3>
+
+    <label>
+      Título
+      <input type="text" id="anuncio-titulo" />
+    </label>
+
+    <label>
+  Categoria
+  <input
+    type="text"
+    id="anuncio-categoria"
+    placeholder="ex: Prova, Trabalho, Aviso Geral, Financeiro, Confraternização"
+  />
+</label>
+
+
+    <label>
+      Descrição
+      <textarea id="anuncio-descricao"></textarea>
+    </label>
+
+    <div class="modal-actions">
+      <button id="cancelar-anuncio" class="btn btn-secondary">
+        Cancelar
+      </button>
+      <button id="salvar-anuncio" class="btn">
+        Publicar
+      </button>
+    </div>
+  </div>
+</div>
+
+<section id="avaliacoes" class="section">
+  <div class="card">
+
+    <div class="avaliacoes-header">
+      <h2>📚 Avaliações</h2>
+
+      <button
+        id="btn-criar-disciplina"
+        class="btn admin-only hidden"
+      >
+        + Criar disciplina
+      </button>
+    </div>
+
+    <div id="avaliacoes-list">
+      <p class="empty">Carregando avaliações...</p>
+    </div>
+
+  </div>
+</section>
+
+
+<section id="horarios" class="section">
+  <div class="card">
+    <h2>⏰ Horários</h2>
+
+    <div class="pdf-viewer">
+      <iframe
+        src="assets/horarios.pdf"
+        width="100%"
+        height="700"
+        style="border: none;"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<section id="ementas" class="section">
+  <div class="card">
+    <h2>📖 Ementas</h2>
+
+    <div class="ementas-lista">
+
+      <!-- ITEM -->
+      <div class="ementa-item">
+        <button class="ementa-toggle" data-pdf="assets/ementas/estudos-culturais.pdf">
+          Estudos Culturais
+        </button>
+        <div class="ementa-pdf hidden">
+          <iframe src="assets/ementas/estudos-culturais.pdf"></iframe>
+        </div>
+      </div>
+
+      <div class="ementa-item">
+        <button class="ementa-toggle" data-pdf="assets/ementas/estagio-evangelizacao.pdf">
+          Estágio em Evangelização
+        </button>
+        <div class="ementa-pdf hidden">
+          <iframe src="assets/ementas/estagio-evangelizacao.pdf"></iframe>
+        </div>
+      </div>
+
+      <div class="ementa-item">
+        <button class="ementa-toggle" data-pdf="assets/ementas/fci.pdf">
+          Fundamentos do Crescimento da Igreja
+        </button>
+        <div class="ementa-pdf hidden">
+          <iframe src="assets/ementas/fci.pdf"></iframe>
+        </div>
+      </div>
+
+      <div class="ementa-item">
+        <button class="ementa-toggle" data-pdf="assets/ementas/homiletica-2.pdf">
+          Homilética II
+        </button>
+        <div class="ementa-pdf hidden">
+          <iframe src="assets/ementas/homiletica-2.pdf"></iframe>
+        </div>
+      </div>
+
+      <div class="ementa-item">
+        <button class="ementa-toggle" data-pdf="assets/ementas/integracao-ensino-comunidade-5.pdf">
+          Integração Ensino e Comunidade V
+        </button>
+        <div class="ementa-pdf hidden">
+          <iframe src="assets/ementas/integracao-ensino-comunidade-5.pdf"></iframe>
+        </div>
+      </div>
+
+      <div class="ementa-item">
+        <button class="ementa-toggle" data-pdf="assets/ementas/musica-sacra.pdf">
+          Música Sacra
+        </button>
+        <div class="ementa-pdf hidden">
+          <iframe src="assets/ementas/musica-sacra.pdf"></iframe>
+        </div>
+      </div>
+
+      <div class="ementa-item">
+        <button class="ementa-toggle" data-pdf="assets/ementas/pp5-metodos-evangelisticos.pdf">
+          PP5 – Métodos Evangelísticos
+        </button>
+        <div class="ementa-pdf hidden">
+          <iframe src="assets/ementas/pp5-metodos-evangelisticos.pdf"></iframe>
+        </div>
+      </div>
+
+      <div class="ementa-item">
+        <button class="ementa-toggle" data-pdf="assets/ementas/panorama-religioso-brasileiro.pdf">
+          Panorama Religioso Brasileiro
+        </button>
+        <div class="ementa-pdf hidden">
+          <iframe src="assets/ementas/panorama-religioso-brasileiro.pdf"></iframe>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section id="calendario" class="section">
+  <div class="card">
+    <h2>🗓️ Calendário</h2>
+
+    <div class="pdf-viewer">
+      <iframe
+        src="assets/calendario.pdf"
+        width="100%"
+        height="700"
+        style="border: none;"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<div id="modal-disciplina" class="modal hidden">
+  <div class="modal-content">
+    <h3>Criar disciplina</h3>
+
+    <input
+      type="text"
+      id="disciplina-nome"
+      placeholder="Ex: História da Igreja"
+    />
+
+    <div class="modal-actions">
+      <button id="cancelar-disciplina">Cancelar</button>
+      <button id="salvar-disciplina">Criar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CRIAR AVALIAÇÃO -->
+<div id="modal-avaliacao" class="modal hidden">
+  <div class="modal-content">
+    <h3>Nova avaliação</h3>
+
+    <label>
+      Tipo
+      <select id="avaliacao-tipo">
+        <option value="prova">Prova</option>
+        <option value="trabalho">Trabalho</option>
+      </select>
+    </label>
+
+    <label>
+      Título
+      <input
+        type="text"
+        id="avaliacao-titulo"
+        placeholder="Ex: Prova I – História da Igreja"
+      />
+    </label>
+
+    <label>
+      Data
+      <input type="date" id="avaliacao-data" />
+    </label>
+
+    <label>
+      Descrição
+      <textarea
+        id="avaliacao-descricao"
+        placeholder="Conteúdo, orientações, observações..."
+      ></textarea>
+    </label>
+
+    <div class="modal-actions">
+      <button id="cancelar-avaliacao" class="btn btn-secondary">
+        Cancelar
+      </button>
+      <button id="salvar-avaliacao" class="btn">
+        Criar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".ementa-toggle");
+    if (!btn) return;
+
+    const item = btn.closest(".ementa-item");
+    const pdf = item.querySelector(".ementa-pdf");
+
+    // Fecha todas
+    document.querySelectorAll(".ementa-pdf").forEach(el => {
+      if (el !== pdf) el.classList.add("hidden");
+    });
+
+    // Alterna a atual
+    pdf.classList.toggle("hidden");
+  });
+</script>
+
+<!-- MODAL EVENTO -->
+<div id="modal-evento" class="modal hidden">
+  <div class="modal-content">
+
+    <h3>Novo evento</h3>
+
+    <input id="evento-titulo" placeholder="Título do evento">
+
+    <textarea id="evento-descricao" placeholder="Descrição"></textarea>
+
+    <div class="modal-actions">
+      <button id="cancelar-evento">Cancelar</button>
+      <button id="salvar-evento">Salvar</button>
+    </div>
+
+  </div>
+</div>
+
+
+
+  <!-- FOOTER -->
+  <footer class="app-footer">
+    <small>
+      Turma XI de Teologia • SALT-FAP
+    </small>
+  </footer>
+
+<div id="modal-duvida" class="modal hidden">
+  <div class="modal-content">
+
+    <h3>Enviar dúvida</h3>
+
+    <input id="duvida-nome" placeholder="Seu nome (opcional)">
+
+    <input id="duvida-disciplina" placeholder="Disciplina (opcional)">
+
+    <textarea
+      id="duvida-pergunta"
+      placeholder="Digite sua dúvida..."
+    ></textarea>
+
+    <div class="modal-actions">
+      <button id="cancelar-duvida" class="btn btn-secondary">
+        Cancelar
+      </button>
+
+      <button id="enviar-duvida" class="btn">
+        Enviar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+</body>
+</html>
