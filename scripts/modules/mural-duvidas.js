@@ -79,8 +79,7 @@ export async function ocultarDuvida(id) {
 
   const ref = doc(db, "duvidas", id);
 
-  return updateDoc(ref, {
-    publica: false
-  });
+  return deleteDoc(ref);
 
 }
+
