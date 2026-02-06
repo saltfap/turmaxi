@@ -3,7 +3,11 @@ import {
   criarEvento
 } from "../services/firestore.js";
 
+import { Timestamp } from 
+"https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
 export function initCalendario() {
+  const isAdmin = window.isAdmin === true;
 
   const titulo = document.getElementById("cal-titulo");
   const grid = document.getElementById("cal-grid");
@@ -11,14 +15,23 @@ export function initCalendario() {
   const btnPrev = document.getElementById("cal-prev");
   const btnNext = document.getElementById("cal-next");
 
-  const modal = document.getElementById("modal-evento");
+  let modal = null;
+let tituloInput = null;
+let tipoInput = null;
+let descInput = null;
+let salvarBtn = null;
+let cancelarBtn = null;
 
-  const tituloInput = document.getElementById("evento-titulo");
-  const tipoInput = document.getElementById("evento-tipo");
-  const descInput = document.getElementById("evento-descricao");
+if (isAdmin) {
+  modal = document.getElementById("modal-evento");
+  tituloInput = document.getElementById("evento-titulo");
+  tipoInput = document.getElementById("evento-tipo");
+  descInput = document.getElementById("evento-descricao");
 
-  const salvarBtn = document.getElementById("salvar-evento");
-  const cancelarBtn = document.getElementById("cancelar-evento");
+  salvarBtn = document.getElementById("salvar-evento");
+  cancelarBtn = document.getElementById("cancelar-evento");
+}
+
 
   let dataAtual = new Date();
   let eventos = [];
@@ -41,7 +54,7 @@ export function initCalendario() {
 
   function eventoNoDia(dia, mes, ano) {
     return eventos.find(ev => {
-      const d = new Date(ev.data);
+      const d = ev.data.toDate();
       d.setHours(0,0,0,0);
 
       return (
@@ -58,6 +71,7 @@ export function initCalendario() {
 
   async function renderizar() {
 
+console.log("Evento salvo:", diaSelecionado);
     await carregarEventos();
 
     grid.innerHTML = "";
@@ -106,14 +120,18 @@ export function initCalendario() {
       // clique no dia
       el.addEventListener("click", () => {
 
-        diaSelecionado = dataDia;
+  if (!isAdmin) return;
 
-        tituloInput.value = "";
-        descInput.value = "";
-        tipoInput.value = "aviso";
+  diaSelecionado = dataDia;
 
-        modal.classList.remove("hidden");
-      });
+  tituloInput.value = "";
+  descInput.value = "";
+  tipoInput.value = "aviso";
+
+  modal.classList.remove("hidden");
+});
+
+
 
       grid.appendChild(el);
     }
@@ -137,6 +155,8 @@ export function initCalendario() {
   // SALVAR EVENTO
   // ========================
 
+  if (isAdmin && salvarBtn && cancelarBtn) {
+
   salvarBtn.addEventListener("click", async () => {
 
     if (!diaSelecionado) return;
@@ -146,17 +166,18 @@ export function initCalendario() {
       titulo: tituloInput.value,
       descricao: descInput.value,
       tipo: tipoInput.value,
-      data: diaSelecionado
+      data: Timestamp.fromDate(diaSelecionado)
     });
 
     modal.classList.add("hidden");
-
     renderizar();
   });
 
   cancelarBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
   });
+}
+
 
   // iniciar
   renderizar();
