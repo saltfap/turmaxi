@@ -364,7 +364,7 @@ diaSelecionado.setHours(0,0,0,0);
 
       tituloInput.value = ev.titulo;
       descInput.value = ev.descricao || "";
-      tipoInput.value = ev.tipo;
+
 
       modal.dataset.editando = id;
 
