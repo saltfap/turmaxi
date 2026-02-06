@@ -260,13 +260,14 @@ function mostrarEventosDoDia(data) {
         <p>${ev.descricao || ""}</p>
 
         ${
-          isAdmin ? `
-          <div class="evento-actions">
-            <button data-edit="${ev.id}">✏ Editar</button>
-            <button data-hide="${ev.id}">🗑 Ocultar</button>
-          </div>
-          ` : ""
-        }
+  isAdmin && ev.origem === "evento" ? `
+  <div class="evento-actions">
+    <button data-edit="${ev.id}">✏ Editar</button>
+    <button data-hide="${ev.id}">🗑 Ocultar</button>
+  </div>
+  ` : ""
+}
+
       </div>
     `).join("");
   }
@@ -355,6 +356,8 @@ function ligarAcoesEventos() {
 
       const id = btn.dataset.edit;
       const ev = eventos.find(e => e.id === id);
+if (!ev) return;
+
 
 diaSelecionado = ev.data.toDate();
 diaSelecionado.setHours(0,0,0,0);
