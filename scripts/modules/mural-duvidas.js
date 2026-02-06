@@ -1,8 +1,7 @@
 // mural-duvidas.js
 
 import {
-  listarDuvidasPublicas,
-  ocultarDuvida
+  listarDuvidasPublicas
 } from "../services/firestore.js";
 
 export async function carregarMuralDuvidas() {
@@ -74,4 +73,14 @@ function ligarAcoesOcultar() {
     };
 
   });
+}
+
+export async function ocultarDuvida(id) {
+
+  const ref = doc(db, "duvidas", id);
+
+  return updateDoc(ref, {
+    publica: false
+  });
+
 }
