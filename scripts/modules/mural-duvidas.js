@@ -4,6 +4,14 @@ import {
   listarDuvidasPublicas
 } from "../services/firestore.js";
 
+import {
+  doc,
+  deleteDoc
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+import { db } from "../services/firebase.js";
+
+
 export async function carregarMuralDuvidas() {
 
   const box = document.getElementById("mural-duvidas");
@@ -82,4 +90,5 @@ export async function ocultarDuvida(id) {
   return deleteDoc(ref);
 
 }
+
 
