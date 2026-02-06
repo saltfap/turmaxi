@@ -10,9 +10,10 @@ import {
   addDoc,
   updateDoc,
   doc,
-  serverTimestamp,
-  db
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+import { db } from "./firebase.js";
 
 console.log("firestore.js carregou");
 
@@ -176,7 +177,12 @@ export async function listarAvaliacoesAtivas() {
 // =======================
 
 export async function listarEventos() {
-  const snapshot = await getDocs(collection(db, "eventos"));
+  const q = query(
+    collection(db, "eventos"),
+    where("ativo", "==", true)
+  );
+
+  const snapshot = await getDocs(q);
 
   return snapshot.docs.map(doc => ({
     id: doc.id,
@@ -187,9 +193,11 @@ export async function listarEventos() {
 export async function criarEvento(dados) {
   return addDoc(collection(db, "eventos"), {
     ...dados,
+    ativo: true,
     criadoEm: serverTimestamp()
   });
 }
+
 
 // =======================
 // EVENTOS
