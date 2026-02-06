@@ -94,14 +94,5 @@ function bindButtons() {
 //    });
 //  });
 
-  // Botão de enviar dúvida
-  const duvidaBtn = document.getElementById("btn-enviar-duvida");
-
-if (duvidaBtn) {
-  duvidaBtn.addEventListener("click", () => {
-    alert("Envio de dúvidas será implementado em breve.");
-  });
-}
-
 }
 
