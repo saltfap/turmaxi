@@ -58,8 +58,7 @@ if (isAdmin) {
 
   function eventoNoDia(dia, mes, ano) {
     return eventos.find(ev => {
-      const d = ev.data.toDate();
-      d.setHours(0,0,0,0);
+      const d = normalizarDataFirestore(ev.data);
 
       return (
         d.getDate() === dia &&
@@ -193,6 +192,22 @@ mostrarEventosDoDia(diaSelecionado);
   });
 }
 
+function normalizarDataFirestore(data) {
+
+  if (!data) return null;
+
+  let d;
+
+  if (typeof data.toDate === "function") {
+    d = data.toDate(); // Timestamp
+  } else {
+    d = new Date(data); // fallback
+  }
+
+  d.setHours(0,0,0,0);
+  return d;
+}
+
 
 function mostrarEventosDoDia(data) {
 
@@ -207,11 +222,11 @@ function mostrarEventosDoDia(data) {
 
   const eventosDia = eventos.filter(ev => {
 
-    const d = ev.data.toDate();
-    d.setHours(0,0,0,0);
+  const d = normalizarDataFirestore(ev.data);
 
-    return d.getTime() === dataNormalizada.getTime();
-  });
+  return d && d.getTime() === dataNormalizada.getTime();
+});
+
 
   // =========================
   // Cabeçalho do dia
