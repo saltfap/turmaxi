@@ -1,6 +1,9 @@
-//mural-duvidas
+// mural-duvidas.js
 
-import { listarDuvidasPublicas } from "../services/firestore.js";
+import {
+  listarDuvidasPublicas,
+  ocultarDuvida
+} from "../services/firestore.js";
 
 export async function carregarMuralDuvidas() {
 
@@ -31,13 +34,44 @@ export async function carregarMuralDuvidas() {
 
       ${
         d.disciplina
-          ? `<div class="duvida-disciplina">
-              ${d.disciplina}
-            </div>`
+          ? `<div class="duvida-disciplina">${d.disciplina}</div>`
+          : ""
+      }
+
+      ${
+        window.isAdmin
+          ? `<button class="btn btn-small"
+              data-ocultar="${d.id}">
+              Ocultar
+            </button>`
           : ""
       }
 
     </div>
 
   `).join("");
+
+  ligarAcoesOcultar();
+}
+
+function ligarAcoesOcultar() {
+
+  document.querySelectorAll("[data-ocultar]").forEach(btn => {
+
+    btn.onclick = async () => {
+
+      const id = btn.dataset.ocultar;
+
+      if (!confirm("Ocultar esta resposta do mural?"))
+        return;
+
+      btn.textContent = "Ocultando...";
+      btn.disabled = true;
+
+      await ocultarDuvida(id);
+
+      carregarMuralDuvidas();
+    };
+
+  });
 }
