@@ -220,12 +220,12 @@ function mostrarEventosDoDia(data) {
 
   box.innerHTML = "";
 
-  const eventosDia = eventos.filter(ev => {
+  const eventosDia = itensDoDia(
+  dataNormalizada.getDate(),
+  dataNormalizada.getMonth(),
+  dataNormalizada.getFullYear()
+);
 
-  const d = normalizarDataFirestore(ev.data);
-
-  return d && d.getTime() === dataNormalizada.getTime();
-});
 
 
   // =========================
