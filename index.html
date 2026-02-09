@@ -102,13 +102,25 @@
 <!-- MEDITAÇÕES -->
 
 <div class="card">
-
-  <h2>📖 Meditação da Semana</h2>
+  <h2>📖 Meditações da Semana</h2>
 
   <div id="meditacoes-semana">
-    <p class="empty">Nenhuma meditação registrada.</p>
+    <p class="empty">Nenhuma meditação cadastrada.</p>
+  </div>
+</div>
+
+<div class="card admin-only hidden" id="painel-meditacoes">
+  <div class="avaliacoes-header">
+    <h2>📖 Painel — Meditações (Liderança)</h2>
+
+    <button id="btn-add-meditacao" class="btn">
+      + Cadastrar meditação
+    </button>
   </div>
 
+  <div id="meditacoes-admin-list">
+    <p class="empty">Carregando...</p>
+  </div>
 </div>
 
 
@@ -416,6 +428,27 @@
       <button id="salvar-avaliacao" class="btn">
         Criar
       </button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-meditacao" class="modal hidden">
+  <div class="modal-content">
+    <h3>Meditação</h3>
+
+    <label>
+      Data
+      <input type="date" id="meditacao-data" />
+    </label>
+
+    <label>
+      Nome
+      <input type="text" id="meditacao-nome" placeholder="Quem vai meditar?" />
+    </label>
+
+    <div class="modal-actions">
+      <button id="cancelar-meditacao" class="btn btn-secondary">Cancelar</button>
+      <button id="salvar-meditacao" class="btn">Salvar</button>
     </div>
   </div>
 </div>
