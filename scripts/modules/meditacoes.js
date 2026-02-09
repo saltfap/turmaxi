@@ -35,6 +35,32 @@ export async function carregarMeditacoesSemana() {
       return dt >= ini && dt <= fim;
     });
 
+///PREGAÇÃO DE HOJE///
+
+const hoje = new Date();
+const hojeStr = hoje.toISOString().slice(0,10); // YYYY-MM-DD
+
+const hojeItem = semana.find(m => m.data === hojeStr);
+
+const boxHoje = document.getElementById("meditacao-hoje");
+if (boxHoje) {
+  if (hojeItem) {
+    const dt = new Date(hojeItem.data + "T00:00:00");
+    boxHoje.innerHTML = `
+      <div class="top">
+        <div class="data"><strong>HOJE</strong> • ${dt.toLocaleDateString("pt-BR")}</div>
+        <span class="badge">Pregação do dia</span>
+      </div>
+      <div class="nome">${hojeItem.nome}</div>
+    `;
+    boxHoje.classList.remove("hidden");
+  } else {
+    boxHoje.classList.add("hidden");
+    boxHoje.innerHTML = "";
+  }
+}
+
+
     if (!semana.length) {
       box.innerHTML = "<p class='empty'>Nenhuma meditação cadastrada para esta semana.</p>";
       return;
