@@ -12,6 +12,7 @@ import { initDuvidas } from "./modules/duvidas.js";
 import { carregarMuralDuvidas } from "./modules/mural-duvidas.js";
 import { carregarPainelDuvidas } from "./modules/painel-duvidas.js";
 import { carregarMeditacoesSemana } from "./modules/meditacoes.js";
+import { initMeditacoesAdmin } from "./modules/meditacoes-admin.js";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -57,6 +58,7 @@ function initApp() {
   initCalendario();
   initDuvidas();
   carregarMeditacoesSemana();
+  initMeditacoesAdmin();
 
 }
 

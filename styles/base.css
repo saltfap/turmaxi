@@ -509,6 +509,13 @@ main {
   margin-top: 10px;
 }
 
+.meditacao-item {
+  background: #f9fafb;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
 .duvida-pergunta {
   font-weight: 600;
   margin-bottom: 6px;

@@ -290,28 +290,36 @@ export async function responderDuvida(id, resposta) {
 }
 
 // =======================
-// 📚 MEDITAÇÃO — SEMANA
+// MEDITAÇÕES
 // =======================
 
-export async function salvarMeditacaoSemana(dados) {
-
+export async function criarMeditacao(dados) {
   return addDoc(collection(db, "meditacoes"), {
-    ...dados,
+    nome: dados.nome || "",
+    data: dados.data,
     criadoEm: serverTimestamp()
   });
-
 }
 
-export async function listarMeditacoesSemana() {
+export async function editarMeditacao(id, dados) {
+  const ref = doc(db, "meditacoes", id);
+  return updateDoc(ref, {
+    nome: dados.nome || "",
+    data: dados.data
+  });
+}
 
-  const snapshot = await getDocs(
-    query(
-      collection(db, "meditacoes"),
-      orderBy("data", "asc")
-    )
+export async function excluirMeditacao(id) {
+  const ref = doc(db, "meditacoes", id);
+  return deleteDoc(ref);
+}
+
+export async function listarMeditacoes() {
+  const snap = await getDocs(
+    query(collection(db, "meditacoes"), orderBy("data", "asc"))
   );
 
-  return snapshot.docs.map(doc => ({
+  return snap.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
   }));
