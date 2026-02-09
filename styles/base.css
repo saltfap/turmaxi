@@ -548,3 +548,38 @@ main {
   border-radius:8px;
   margin-top:10px;
 }
+
+.meditacao-hoje{
+  border: 1px solid #e5e7eb;
+  background: #eef2ff;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 10px 0 12px;
+}
+
+.meditacao-hoje .top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.meditacao-hoje .badge{
+  font-size:.75rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #0B2A4A;
+  color:#fff;
+  white-space:nowrap;
+}
+
+.meditacao-hoje .nome{
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.meditacao-hoje .data{
+  font-size:.85rem;
+  color:#374151;
+}
